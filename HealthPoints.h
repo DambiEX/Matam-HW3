@@ -12,8 +12,11 @@
 class HealthPoints{
 
 public:
-    explicit HealthPoints(int max_health = DEFAULT_HEALTH);
-    HealthPoints operator=(HealthPoints other); //TODO: clang tidy warnings
+    HealthPoints(int max_health = DEFAULT_HEALTH);
+    ~HealthPoints() = default;
+    //HealthPoints&() = default; //TODO: copy ctor syntax
+    HealthPoints& operator=(const HealthPoints&) = default;
+
     explicit operator bool() const;
 
     HealthPoints& operator+=(const int num);
@@ -37,7 +40,6 @@ private:
 
 HealthPoints operator+(const HealthPoints health, const int num);
 HealthPoints operator-(const HealthPoints health, const int num);
-
 //-------------operators in the wrong order just call operators in the right order-----------//
 HealthPoints operator+(const int num, const HealthPoints health);
 HealthPoints operator-(const int num, const HealthPoints health);

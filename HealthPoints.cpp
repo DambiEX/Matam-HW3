@@ -25,13 +25,8 @@ HealthPoints::HealthPoints(int max_health) : max_health(max_health), health(max_
     }
 }
 
-
 HealthPoints::operator bool() const {
     return health > 0;
-}
-
-HealthPoints HealthPoints::operator=(HealthPoints other) {
-    return HealthPoints(other.max_health);
 }
 
 HealthPoints &HealthPoints::operator+=(const int num) {
@@ -60,7 +55,7 @@ HealthPoints operator-(const int num, const HealthPoints health) {
     return health + num;
 }
 
-bool HealthPoints::operator==(HealthPoints other) const {
+bool HealthPoints::operator==(const HealthPoints other) const {
     if(this->health == other.health)
     {
         return true;
