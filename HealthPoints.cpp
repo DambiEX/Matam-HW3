@@ -3,6 +3,9 @@
 #include "HealthPoints.h"
 
 static int fill(const int threshold, const int attribute, const int amount, int negativity) {
+    /*
+     * Fills up to a certain threshold. Or empties an int down to 0, depending on negativity.
+     */
     if(amount <= 0)
     {
         return attribute;
@@ -29,6 +32,8 @@ HealthPoints::operator bool() const {
     return health > 0;
 }
 
+
+//-------------------------------addition/subtraction operators----------------------------//
 HealthPoints &HealthPoints::operator+=(const int num) {
     health = fill(max_health, health, num, POSITIVE);
     return *this;
@@ -43,18 +48,21 @@ HealthPoints operator+(const HealthPoints health, const int num) {
     return HealthPoints(health) += num;
 }
 
-HealthPoints operator+(const int num, const HealthPoints health) {
-    return health + num;
-}
-
 HealthPoints operator-(const HealthPoints health, const int num) {
     return HealthPoints(health) -= num;
+}
+
+//------wrong order operators just call the correct operators in the right order-----------//
+HealthPoints operator+(const int num, const HealthPoints health) {
+    return health + num;
 }
 
 HealthPoints operator-(const int num, const HealthPoints health) {
     return health + num;
 }
 
+
+//----------------------comparison operators-----------------------------//
 bool HealthPoints::operator==(const HealthPoints other) const {
     if(this->health == other.health)
     {

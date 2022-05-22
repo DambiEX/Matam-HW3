@@ -14,15 +14,13 @@ class HealthPoints{
 public:
     HealthPoints(int max_health = DEFAULT_HEALTH);
     ~HealthPoints() = default;
-    //HealthPoints&() = default; //TODO: copy ctor syntax
-    HealthPoints& operator=(const HealthPoints&) = default;
+    HealthPoints(const HealthPoints&) = default; //assignment constructor
+    HealthPoints& operator=(const HealthPoints&) = default; // '=' operator
 
     explicit operator bool() const;
 
-    HealthPoints& operator+=(const int num);
-    HealthPoints& operator-=(const int num);
-
-
+    HealthPoints& operator+=(int num);
+    HealthPoints& operator-=(int num);
 
     //--------------comparison operators----------------//
     bool operator==(HealthPoints other) const;
@@ -38,10 +36,10 @@ private:
     int health;
 };
 
-HealthPoints operator+(const HealthPoints health, const int num);
-HealthPoints operator-(const HealthPoints health, const int num);
-//-------------operators in the wrong order just call operators in the right order-----------//
-HealthPoints operator+(const int num, const HealthPoints health);
-HealthPoints operator-(const int num, const HealthPoints health);
+HealthPoints operator+(HealthPoints health, int num);
+HealthPoints operator-(HealthPoints health, int num);
+//------wrong order operators just call the correct operators in the right order-----------//
+HealthPoints operator+(int num, HealthPoints health);
+HealthPoints operator-(const int num, const HealthPoints health); //TODO: clang tidy? const or not to const
 
 #endif //HW3_HEALTHPOINTS_H

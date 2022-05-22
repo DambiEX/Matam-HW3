@@ -2,6 +2,9 @@
 #define HW3_QUEUE_H
 
 class Queue{
+public:
+
+private:
 
 };
 
