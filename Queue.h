@@ -3,6 +3,7 @@
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
 const int START_SIZE = 100;
+const int EXPAND_RATE = 4;
 
 template<class T> class Queue{
 public:
@@ -10,7 +11,8 @@ public:
     Queue(const Queue&); //copy constructor
     Queue& operator=(const Queue&); // '=' operator
     ~Queue(); //deconstructor
-    
+
+    void pushback(T item);
 
     //-------------------Iterator------------------------// 
     class Iterator;  //TODO: syntax for declaring one class inside another?
@@ -54,10 +56,27 @@ Queue<T>::Queue() : max_size(START_SIZE), current_size(0), arr(new T[max_size]),
 
 template<class T>
 void Queue<T>::expand() {
-
+    T* arr2 = new T[current_size*EXPAND_RATE];
+    for (T item:arr)  //TODO: iterator syntax
+    {
+        arr2.pushback(item); //TODO: make copying works as intended here.
+    }
 }
 
-
+template<class T>
+void Queue<T>::pushback(T item) {
+    if (last_index<max_size) //TODO: off by one error?
+    {
+        arr[last_index] = item;
+        last_index++;
+    }
+    else //out of space
+    {
+        expand();
+        arr[last_index] = item;
+        last_index++;
+    }
+}
 
 
 #endif //HW3_QUEUE_H
