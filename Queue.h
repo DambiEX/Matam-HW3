@@ -2,36 +2,62 @@
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
+const int START_SIZE = 100;
 
 template<class T> class Queue{
 public:
     Queue(); //constructor
     Queue(const Queue&); //copy constructor
     Queue& operator=(const Queue&); // '=' operator
-    ~Queue();
+    ~Queue(); //deconstructor
+    
 
-    class iterator;
-    iterator begin() const;
-    iterator end() const;
+    //-------------------Iterator------------------------// 
+    class Iterator;  //TODO: syntax for declaring one class inside another?
+    Iterator begin() const;
+    Iterator end() const;
+
 
 private:
-    T* items; // an array of T
-    int size;
+    T* arr; // an array of T
+    int max_size, current_size;
+    int first_index, last_index;
+
+    void expand();
 };
 
-template<class T> class Queue<T>::iterator {
-    //TODO: finish iterator using slides from lecture about operators. or from tutorial.
+template<class T> class Queue<T>::Iterator {
+    //TODO: finish Iterator using slides from lecture about operators. or from tutorial.
 public:
-    iterator(); //TODO: finish constructor
-    iterator(const iterator&) = default;
-    ~iterator() = default;
+    Iterator(); //TODO: finish constructor
+    Iterator(const Iterator&) = default;
+    ~Iterator() = default;
 
-    iterator begin() const;
-    iterator end() const;
+    Iterator begin() const;
+    Iterator end() const;
 
 private:
     const Queue<T>* queue;
 
     friend class Queue<T>;
 };
+
+//-------------------implementation of template functions----------------------------//
+template<class T>
+Queue<T>::~Queue() {
+delete arr;
+}
+
+template<class T>
+Queue<T>::Queue() : max_size(START_SIZE), current_size(0), arr(new T[max_size]), first_index(0), last_index(0)
+{}
+
+template<class T>
+void Queue<T>::expand() {
+
+}
+
+
+
+
 #endif //HW3_QUEUE_H
