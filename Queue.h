@@ -1,4 +1,6 @@
 //TODO: member parameters should start with 'm_'
+//TODO: all code conventions and naming conventions.
+//TODO: destroy Iterators in case the queue is changed while they exist.
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
@@ -7,7 +9,7 @@
 
 template<class T> class Queue{
 public:
-    Queue(); //constructor
+    Queue(Node<T> *first_ptr = nullptr, Node<T> *last_ptr = nullptr); //constructor
     Queue(const Queue&); //copy constructor
     Queue& operator=(const Queue&); // '=' operator
     ~Queue(); //deconstructor
@@ -88,16 +90,16 @@ Queue<T>::Iterator::Iterator(Queue<T> *queue, Node<T> *node) : queue(queue), cur
 
 template<class T>
 Queue<T>::~Queue() {  //TODO: code copied from HW1. validity needs to be checked.
-    while (last->next) {
+    while (last->get_next()) {
         popFront();
     }
     popFront(); //the last item doesn't have a "next" but it still needs to be deleted.
 }
 
 template<class T>
-Queue<T>::Queue() : nodes_amount(0), first(nullptr), last(nullptr){   //old code: first(new Node<T>), last(first){
+Queue<T>::Queue(Node<T> *first_ptr, Node<T> *last_ptr) : nodes_amount(0), first(first_ptr), last(last_ptr){
 
-} //TODO: syntax for assigning memory on heap in constructors.
+}
 
 
 template<class T>
@@ -149,6 +151,31 @@ template<class T>
 class Queue<T>::Iterator Queue<T>::end() const {
     return Iterator(this, nullptr);
 }
+
+
+//----------------------------------complex functions--------------------------------//
+
+template<class T>
+Queue<T> filter(Queue<T> queue, bool function(T item)){ //TODO: function as parameters syntax
+    Queue<T> new_queue;
+    for (T item : queue) //TODO: make sure iterator returns items as intended.
+    {
+        if (function(item))
+        {
+            new_queue.pushBack(item);
+        }
+    }
+    return new_queue;
+}
+
+template<class T>
+Queue<T> transform(Queue<T> queue, void function(T &item)){
+    for (T item : queue)
+    {
+        function(item);
+    }
+}
+
 
 
 #endif //HW3_QUEUE_H

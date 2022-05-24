@@ -11,4 +11,4 @@ add_executable(HW3
         HealthPointsExampleTest.cpp
         QueueExampleTests.cpp
         TestMain.cpp
-        TestUtils.h Queue.h Node.h filter.h)
+        TestUtils.h Queue.h Node.h)
