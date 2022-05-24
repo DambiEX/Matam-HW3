@@ -36,23 +36,25 @@ private:
 template<class T> class Queue<T>::Iterator { //TODO: needs to be 'Iterator<T>' or 'Iterator'?
     //TODO: finish Iterator using slides from lecture about operators. or from tutorial.
 public:
-    explicit Iterator(Queue<T> *queue); //TODO: finish constructor
     Iterator(const Iterator&) = default;
     ~Iterator() = default;
+    //-----------------------------Iterator functions-------------------------------------//
+    void set_current(Node<T> *node);
 
     //-----------------------------Iterator operators-------------------------------------//
     bool operator!=(const Iterator &other);
     T operator*();
-    void operator++();
+    void operator++(); //prefix ++ operator
 
-    Iterator begin() const;
-    Iterator end() const;
+//    Iterator begin() const; //these functions need to be part of Queue and not of Iterator
+//    Iterator end() const;
 
 private:
+    explicit Iterator(Queue<T> *queue); //Iterator can only be ininitialized with begin() and end()
     const Queue<T>* queue;
     Node<T>* current;
 
-    friend class Queue<T>; //TODO: make sure friend is needed for internal class.
+    friend class Queue<T>; //friend is needed to call begin() and end()
 };
 
 
@@ -61,11 +63,13 @@ private:
 
 template<class T>
 bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator &other) {
+    //TODO: throw exception if they dont have the same queue.
     return current != other.current;
 }
 
 template<class T>
 T Queue<T>::Iterator::operator*() {
+    //TODO: exception if current == nullptr.
     return *current; //supposed to return current, not pointer to current.
 }
 
@@ -75,23 +79,13 @@ void Queue<T>::Iterator::operator++() {
 }
 
 template<class T>
-typename Queue<T>::Iterator Queue<T>::Iterator::begin() const {
-    Iterator start(queue);
-    start.current = *queue->first;
-    return start;
-}
-
-template<class T>
-typename Queue<T>::Iterator Queue<T>::Iterator::end() const {
-    Iterator temp(queue);
-//    temp.current = *queue->last;
-    temp.current = nullptr;
-    return temp;
-}
-
-template<class T>
 Queue<T>::Iterator::Iterator(Queue<T> *queue) : queue(queue) { //this.queue = address of input queue.
 
+}
+
+template<class T>
+void Queue<T>::Iterator::set_current(Node<T> *node) {
+    current = node;
 }
 
 
@@ -139,6 +133,20 @@ void Queue<T>::popFront() {
 template<class T>
 int Queue<T>::size() {
     return 0;
+}
+
+template<class T>
+class Queue<T>::Iterator Queue<T>::begin() const {
+    Iterator start(this);
+    start.set_current(*first);
+    return start;
+}
+
+template<class T>
+class Queue<T>::Iterator Queue<T>::end() const {
+    Iterator finish(this); //TODO: better naming.
+    finish.set_current(nullptr);
+    return finish;
 }
 
 
