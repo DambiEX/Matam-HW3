@@ -21,10 +21,9 @@ static int fill(const int threshold, const int attribute, const int amount, int 
 }
 
 HealthPoints::HealthPoints(int max_health) : max_health(max_health), health(max_health)
-{ //TODO: return correct error on negative input.
-    if (max_health < 0){
-        throw InvalidArgument;
-        //throw HealthPoints::InvalidArgument; //TODO: syntax
+{
+    if (max_health <= 0){
+        throw HealthPoints::InvalidArgument();
     }
 }
 

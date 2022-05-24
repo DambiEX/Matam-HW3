@@ -7,6 +7,8 @@
 
 template<class T> class Queue{
 public:
+    class EmptyQueue{
+    };
     Queue(); //constructor
     Queue(const Queue&); //copy constructor
     Queue& operator=(const Queue&); // '=' operator
@@ -24,7 +26,9 @@ public:
     class Iterator;
     Iterator begin() const;
     Iterator end() const;
-
+public:
+    class InvalidOperation{
+    };
 
 private:
     Node<T>* first;
@@ -65,7 +69,6 @@ bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator &other) {
     //TODO: throw exception if they dont have the same queue.
     return current != other.current;
 }
-
 template<class T>
 T Queue<T>::Iterator::operator*() {
     //TODO: exception if current == nullptr.
