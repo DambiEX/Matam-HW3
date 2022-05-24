@@ -1,13 +1,10 @@
-//TODO: errors and error codes. ctrl+f for שגיאה
-
+#include <iostream>
 
 #ifndef HW3_HEALTHPOINTS_H
 #define HW3_HEALTHPOINTS_H
 
-//#define DEFAULT_HEALTH 100 //TODO: const int syntax
 #define NEGATIVE -1
 #define POSITIVE 1
-//#define InvalidArgument 1; //TODO: change to exact error code they asked for.
 
 class HealthPoints {
 
@@ -43,7 +40,9 @@ public:
 
     bool operator>=(HealthPoints other) const;
 
-    //TODO: print operator
+    //print operator:
+    friend std::ostream &operator<<(std::ostream &os, HealthPoints current);
+
 private:
     int max_health;
     int health;
