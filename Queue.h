@@ -3,8 +3,7 @@
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
 #include "Node.h"
-const int START_nodes_amount = 100;
-const int EXPAND_RATE = 4;
+
 
 template<class T> class Queue{
 public:
@@ -20,8 +19,9 @@ public:
     int size();
 
 
-    //-------------------Iterator------------------------// 
-    class Iterator;  //TODO: syntax for declaring one class inside another?
+    //-------------------Iterator------------------------//
+
+    class Iterator;
     Iterator begin() const;
     Iterator end() const;
 
@@ -32,30 +32,29 @@ private:
     int nodes_amount;
 };
 
+
+
 //---------------------------------Iterator class------------------------------------------//
+
 template<class T> class Queue<T>::Iterator { //TODO: needs to be 'Iterator<T>' or 'Iterator'?
-    //TODO: finish Iterator using slides from lecture about operators. or from tutorial.
 public:
     Iterator(const Iterator&) = default;
     ~Iterator() = default;
-    //-----------------------------Iterator functions-------------------------------------//
-    void set_current(Node<T> *node);
 
     //-----------------------------Iterator operators-------------------------------------//
-    bool operator!=(const Iterator &other);
-    T operator*();
+
+    bool operator!=(const Iterator &other); //comparison between different Iterators
+    T operator*(); //retrieval of content
     void operator++(); //prefix ++ operator
 
-//    Iterator begin() const; //these functions need to be part of Queue and not of Iterator
-//    Iterator end() const;
-
 private:
-    explicit Iterator(Queue<T> *queue); //Iterator can only be ininitialized with begin() and end()
+    explicit Iterator(Queue<T> *queue, Node<T> *node); //Iterator can only be initialized with begin() and end()
     const Queue<T>* queue;
     Node<T>* current;
 
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
+
 
 
 //-------------------implementation of template Iterator functions----------------------------//
@@ -79,17 +78,14 @@ void Queue<T>::Iterator::operator++() {
 }
 
 template<class T>
-Queue<T>::Iterator::Iterator(Queue<T> *queue) : queue(queue) { //this.queue = address of input queue.
-
-}
-
-template<class T>
-void Queue<T>::Iterator::set_current(Node<T> *node) {
-    current = node;
+Queue<T>::Iterator::Iterator(Queue<T> *queue, Node<T> *node) : queue(queue), current(node) {
+    //this.queue = address of input queue.
 }
 
 
 //-------------------implementation of template Queue functions----------------------------//
+
+
 template<class T>
 Queue<T>::~Queue() {  //TODO: code copied from HW1. validity needs to be checked.
     while (last->next) {
@@ -146,16 +142,12 @@ int Queue<T>::size() {
 
 template<class T>
 class Queue<T>::Iterator Queue<T>::begin() const {
-    Iterator start(this);
-    start.set_current(*first);
-    return start;
+    return Iterator (this, first);
 }
 
 template<class T>
 class Queue<T>::Iterator Queue<T>::end() const {
-    Iterator finish(this); //TODO: better naming.
-    finish.set_current(nullptr);
-    return finish;
+    return Iterator(this, nullptr);
 }
 
 
