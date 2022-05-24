@@ -7,15 +7,16 @@ template<class T> class Node{
 public:
     explicit Node();
     Node(const Node&);
-    ~Node() = default; //TODO: default or do i need to somehow delete the content?
+    ~Node() = default; //TODO: default or do i need to somehow delete the content? pretty sure default is fine since we are in the heap anyway.
 
     void connect_next(const Node* other);
     Node* get_next();
     T get_content();
+    void set_content(T item);
 //    void connect_previous(const Node* other);
 
 private:
-    T content;
+    T content; //an item itself, not a pointer!
     Node* next; //link to next node
 //    Node previous;
 };
@@ -46,6 +47,11 @@ T Node<T>::get_content() {
 template<class T>
 Node<T> *Node<T>::get_next() {
     return next;
+}
+
+template<class T>
+void Node<T>::set_content(T item) {
+    content = item;
 }
 
 

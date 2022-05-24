@@ -92,28 +92,32 @@ void Queue<T>::Iterator::set_current(Node<T> *node) {
 //-------------------implementation of template Queue functions----------------------------//
 template<class T>
 Queue<T>::~Queue() {  //TODO: code copied from HW1. validity needs to be checked.
-    Node<T> head = first;
-    Node<T> temp;
-    while (head->next) {
-        temp = head->next;
-        free(head);
-        head = temp;
+    while (last->next) {
+        popFront();
     }
-    free(head);
+    popFront(); //the last item doesn't have a "next" but it still needs to be deleted.
 }
 
 template<class T>
-Queue<T>::Queue() : nodes_amount(0), first(new Node<T>), last(first){
+Queue<T>::Queue() : nodes_amount(0), first(nullptr), last(nullptr){   //old code: first(new Node<T>), last(first){
 
 } //TODO: syntax for assigning memory on heap in constructors.
 
 
 template<class T>
 void Queue<T>::pushBack(T item) {
-    Node<T> addition = new Node<T>;
-    last->connect_next(addition);
-    last = *addition;
-    nodes_amount++;
+    Node<T> *new_node = new Node<T>; //pointer to new node.
+    new_node->set_content(item);
+    if (size() == 0) //no items
+    {
+        first = new_node;
+    }
+    else
+    {
+        last->connect_next(new_node);
+    }
+    last = new_node;
+    ++nodes_amount;
 }
 
 template<class T>
@@ -127,7 +131,12 @@ T& Queue<T>::front() {
 
 template<class T>
 void Queue<T>::popFront() {
-
+    //TODO: error in case of empty queue. checked in piazza and we need to return error.
+    //queue not empty:
+    Node<T> *temp = first->get_next();
+    delete first;
+    first = temp; //even if temp == nullptr we still want the first item to point there.
+    --nodes_amount;
 }
 
 template<class T>
