@@ -1,4 +1,5 @@
 //TODO: errors and error codes. ctrl+f for שגיאה
+//TODO: member parameters should start with 'm_'
 
 
 #ifndef HW3_HEALTHPOINTS_H

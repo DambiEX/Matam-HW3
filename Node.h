@@ -1,4 +1,3 @@
-//TODO: is "previous" needed?
 #ifndef HW3_NODE_H
 #define HW3_NODE_H
 
@@ -7,51 +6,46 @@ template<class T> class Node{
 public:
     explicit Node();
     Node(const Node&);
-    ~Node() = default; //TODO: default or do i need to somehow delete the content? pretty sure default is fine since we are in the heap anyway.
+    ~Node() = default;
 
-    void connect_next(const Node* other);
+    void connect_next(Node* other);
     Node* get_next();
     T get_content();
     void set_content(T item);
-//    void connect_previous(const Node* other);
 
 private:
-    T content; //an item itself, not a pointer!
-    Node* next; //link to next node
-//    Node previous;
+    T m_content; //an item itself, not a pointer!
+    Node* m_next; //link to m_next node
 };
 
 template<class T>
 
+
+
 //----------------------implementation---------------------//
 
-void Node<T>::connect_next(const Node* other){
-    next = other;
+
+void Node<T>::connect_next(Node* other){
+    m_next = other;
 }
 
-//template<class T>
-//void Node<T>::connect_previous(const Node *other) {
-//    previous = other;
-//}
-
 template<class T>
-Node<T>::Node() : content(), next(nullptr)  { //TODO: memory allocation on heap instead of stack for new nodes/for new content.
-
+Node<T>::Node() : m_content(), m_next(nullptr)  {
 }
 
 template<class T>
 T Node<T>::get_content() {
-    return &content;
+    return &m_content;
 }
 
 template<class T>
 Node<T> *Node<T>::get_next() {
-    return next;
+    return m_next;
 }
 
 template<class T>
 void Node<T>::set_content(T item) {
-    content = item;
+    m_content = item;
 }
 
 
