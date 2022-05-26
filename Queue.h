@@ -5,7 +5,7 @@
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
 #include "Node.h"
-
+#include "stdexcept"
 
 template<class T> class Queue{
 public:
@@ -36,11 +36,12 @@ public:
 
     class EmptyQueue;
 
-
 private:
     Node<T>* m_first;
     Node<T>* m_last;
     int m_nodes_amount;
+
+    void destroyNodes();
 };
 
 
@@ -58,6 +59,9 @@ public:
     T operator*(); //retrieval of m_content
     void operator++(); //prefix ++ operator
 
+    //-------------------Exceptions------------------------//
+    class InvalidOperation;
+
 private:
     explicit Iterator(Queue<T> *queue, Node<T> *node); //Iterator can only be initialized with begin() and end()
     const Queue<T>* m_queue;
@@ -66,20 +70,30 @@ private:
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
 
+//TODO: need to declare these classes again?
+//-------------------------------exceptions classes-------------------------------------------//
 
+//template<class T> class Queue<T>::EmptyQueue{};
+//template<class T> class Queue<T>::Iterator::InvalidOperation{};
 
 //-------------------implementation of template Iterator functions----------------------------//
 
 
 template<class T>
 bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator &other) {
-    //TODO: throw exception if they dont have the same m_queue.
+    if(this->m_queue != other.m_queue) //TODO: needs a "!=" operator between queues for this?
+    {
+        throw (InvalidOperation()); //throws an InvalidOperation object.
+    }
     return m_current != other.m_current;
 }
 
 template<class T>
 T Queue<T>::Iterator::operator*() {
-    //TODO: exception if m_current == nullptr.
+    if (m_current == nullptr)
+    {
+        throw (InvalidOperation());
+    }
     return *m_current; //supposed to return m_current, not pointer to m_current.
 }
 
@@ -94,14 +108,20 @@ Queue<T>::Iterator::Iterator(Queue<T> *queue, Node<T> *node) : m_queue(queue), m
 }
 
 
-//-------------------implementation of template ConstIterator functions------------------------//
-
-
-
-
-
-
 //-------------------implementation of Queue::Iterator functions----------------------------//
+
+
+template<class T>
+typename Queue<T>::Iterator Queue<T>::begin() {
+    return Iterator (this, m_first);
+}
+
+template<class T>
+typename Queue<T>::Iterator Queue<T>::end() {
+    return Iterator(this, nullptr);
+}
+
+//-------------------implementation of Queue::ConstIterator functions----------------------------//
 
 template<class T>
 typename Queue<T>::ConstIterator Queue<T>::begin() const {
@@ -114,29 +134,21 @@ typename Queue<T>::ConstIterator Queue<T>::end() const {
 }
 
 
-//TODO: at the very end, copy code from iterator into ConstIterator.
-//template<class T>
-//typename Queue<T>::Iterator Queue<T>::begin() {
-//    return Iterator (this, m_first);
-//}
-//
-//template<class T>
-//typename Queue<T>::Iterator Queue<T>::end() {
-//    return Iterator(this, nullptr);
-//}
-//
-
-
-
 //-------------------implementation of template Queue functions----------------------------//
-
-
 template<class T>
-Queue<T>::~Queue() {
+void Queue<T>::destroyNodes(){
     while (m_last->get_next()) {
         popFront();
     }
     popFront(); //the m_last item doesn't have a "m_next" but it still needs to be deleted.
+}
+
+template<class T>
+Queue<T>::~Queue() {
+    if (size() > 0)
+    {
+        destroyNodes();
+    }
 }
 
 template<class T>
@@ -147,7 +159,14 @@ Queue<T>::Queue(Node<T> *first_ptr, Node<T> *last_ptr) : m_nodes_amount(0), m_fi
 
 template<class T>
 void Queue<T>::pushBack(T item) {
-    Node<T> *new_node = new Node<T>; //pointer to new node.
+    Node<T> *new_node;
+//    try {
+    new_node = new Node<T>; //TODO: need to free even after bad_alloc?
+//    } //TODO: delete uselss code. destructor is called anyway and it will destroy the nodes.
+//    catch (std::bad_alloc){
+//        destroyNodes();
+//        throw;
+//    };
     new_node->set_content(item);
     if (size() == 0) //no items
     {
@@ -172,7 +191,9 @@ T& Queue<T>::front() {
 
 template<class T>
 void Queue<T>::popFront() {
-    //TODO: error in case of empty m_queue. checked in piazza and we need to return error.
+    if (size() <= 0){
+        throw (EmptyQueue());
+    }
     //m_queue not empty:
     Node<T> *temp = m_first->get_next();
     delete m_first;
@@ -182,7 +203,7 @@ void Queue<T>::popFront() {
 
 template<class T>
 int Queue<T>::size() {
-    return 0;
+    return m_nodes_amount;
 }
 
 
