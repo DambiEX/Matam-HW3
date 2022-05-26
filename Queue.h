@@ -61,7 +61,7 @@ public:
     ConstIterator begin() const;
     ConstIterator end() const;
 
-    class EmptyQueue; //exception class
+    class EmptyQueue{}; //exception class
 };
 
 
@@ -103,7 +103,7 @@ public:
     T& operator*(); //retrieval of m_content
     void operator++(); //prefix ++ operator
 
-    class InvalidOperation; //exception class
+    class InvalidOperation{}; //exception class
 
 private:
     explicit Iterator(Queue<T> *queue, Node *node); //Iterator can only be initialized with begin() and end()
@@ -128,7 +128,7 @@ public:
     T& operator*(); //retrieval of m_content
     void operator++(); //prefix ++ operator
 
-    class InvalidOperation; //exception class
+    class InvalidOperation{}; //exception class
 
 private:
     explicit ConstIterator(const Queue<T> *queue, Node *node); //ConstIterator can only be initialized with begin() and end()
@@ -138,12 +138,6 @@ private:
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
 
-
-//-------------------------------exceptions classes-------------------------------------------//
-
-template<class T> class Queue<T>::EmptyQueue{};
-template<class T> class Queue<T>::Iterator::InvalidOperation{};
-template<class T> class Queue<T>::ConstIterator::InvalidOperation{};
 
 
 //----------------------------------IMPLEMENTATIONS-----------------------------------------//

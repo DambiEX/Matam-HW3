@@ -3,23 +3,18 @@
 #ifndef HW3_HEALTHPOINTS_H
 #define HW3_HEALTHPOINTS_H
 
-#define NEGATIVE -1
-#define POSITIVE 1
-
 class HealthPoints {
 
 public:
     class InvalidArgument {
     };
 
-    static const int DEFAULT_HEALTH = 100;
+    static const int DEFAULT_HEALTH = 100, NEGATIVE = -1, POSITIVE = 1;
 
-    HealthPoints(int max_health = DEFAULT_HEALTH);
-
-    ~HealthPoints() = default;
-
+    HealthPoints(int max_health = DEFAULT_HEALTH); //non-explicit on purpose.
     HealthPoints(const HealthPoints &) = default; //assignment constructor
     HealthPoints &operator=(const HealthPoints &) = default; // '=' operator
+    ~HealthPoints() = default;
 
     explicit operator bool() const;
 
