@@ -388,10 +388,10 @@ Queue<T> filter(const Queue<T> &queue, bool function(T item)){
 }
 
 template<class T>
-void transform(Queue<T> &queue, void function(T&)){
-    for (T item : queue) //for every item in queue
-    {
-        function(item);
+void transform(Queue<T> &queue, void function(T &item)) {
+    //can't use range based for loop because it needs *it and not it.
+    for (typename Queue<T>::Iterator it = queue.begin(); it != queue.end(); ++it) {
+        function(*it);
     }
 }
 
