@@ -54,7 +54,15 @@ bool testArithmaticOperators()
 	healthPoints2 = 160 + healthPoints1; /* now has 100 out of 100 */
 	testResult = testResult && checkHealthPointsValues(healthPoints2, 100, 100);
 
-	return testResult;
+    HealthPoints healthPoints3; /* has 100 points out of 100 */
+    std::cout << healthPoints3 << " first" << std::endl;
+
+    healthPoints3 = healthPoints2 - 4;
+    std::cout << healthPoints3 << " second" << std::endl;
+    healthPoints3 = healthPoints1 + 2;
+    std::cout << healthPoints3 << " third" << std::endl;
+
+    return testResult;
 
 }
 

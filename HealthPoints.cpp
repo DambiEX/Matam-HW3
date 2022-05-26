@@ -1,5 +1,3 @@
-//TODO: pass by reference instead? afte watching lectures and tutorial
-
 #include "HealthPoints.h"
 #include <iostream>
 
