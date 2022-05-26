@@ -10,7 +10,7 @@ public:
 
     void connect_next(Node* other);
     Node* get_next();
-    T get_content();
+    T& get_content();
     void set_content(T item);
 
 private:
@@ -34,8 +34,8 @@ Node<T>::Node() : m_content(), m_next(nullptr)  {
 }
 
 template<class T>
-T Node<T>::get_content() {
-    return &m_content;
+T& Node<T>::get_content() {
+    return &m_content; //returns reference because item should be changeable. e.g "queue1.front() = 3;"
 }
 
 template<class T>

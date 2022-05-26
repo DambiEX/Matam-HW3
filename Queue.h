@@ -15,7 +15,7 @@ public:
     ~Queue(); //destructor
 
     void pushBack(T item);
-    T& front();
+    T& front(); //returns reference because item should be changeable. e.g "queue1.front() = 3;"
 //    const T& front(); //TODO: syntax. why cant i make a const version of this function like in the slides?
     void popFront();
     int size();
@@ -56,7 +56,7 @@ public:
     //-----------------------------Iterator operators-------------------------------------//
 
     bool operator!=(const Iterator &other); //comparison between different Iterators
-    T operator*(); //retrieval of m_content
+    T& operator*(); //retrieval of m_content
     void operator++(); //prefix ++ operator
 
     //-------------------Exceptions------------------------//
@@ -65,19 +65,44 @@ public:
 private:
     explicit Iterator(Queue<T> *queue, Node<T> *node); //Iterator can only be initialized with begin() and end()
     const Queue<T>* m_queue;
-    Node<T>* m_current;
+    Node<T>* m_current_node;
 
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
 
-//TODO: need to declare these classes again?
+//---------------------------------ConstIterator class------------------------------------------//
+template<class T> class Queue<T>::ConstIterator {
+public:
+    ConstIterator(const ConstIterator&) = default;
+    ~ConstIterator() = default;
+
+    //-----------------------------ConstIterator operators-------------------------------------//
+
+    bool operator!=(const ConstIterator &other); //comparison between different ConstIterators
+    T& operator*(); //retrieval of m_content
+    void operator++(); //prefix ++ operator
+
+    //-------------------Exceptions------------------------//
+    class InvalidOperation;
+
+private:
+    explicit ConstIterator(const Queue<T> *queue, Node<T> *node); //ConstIterator can only be initialized with begin() and end()
+    const Queue<T>* m_queue;
+    Node<T>* m_current_node;
+
+    friend class Queue<T>; //friend is needed to call begin() and end()
+};
+
+
+
 //-------------------------------exceptions classes-------------------------------------------//
 
-//template<class T> class Queue<T>::EmptyQueue{};
-//template<class T> class Queue<T>::Iterator::InvalidOperation{};
+template<class T> class Queue<T>::EmptyQueue{};
+template<class T> class Queue<T>::Iterator::InvalidOperation{};
+template<class T> class Queue<T>::ConstIterator::InvalidOperation{};
 
-//-------------------implementation of template Iterator functions----------------------------//
 
+//-------------------implementation of Queue::Iterator operators----------------------------//
 
 template<class T>
 bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator &other) {
@@ -85,25 +110,25 @@ bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator &other) {
     {
         throw (InvalidOperation()); //throws an InvalidOperation object.
     }
-    return m_current != other.m_current;
+    return m_current_node != other.m_current_node;
 }
 
 template<class T>
-T Queue<T>::Iterator::operator*() {
-    if (m_current == nullptr)
+T& Queue<T>::Iterator::operator*() {
+    if (m_current_node == nullptr)
     {
         throw (InvalidOperation());
     }
-    return *m_current; //supposed to return m_current, not pointer to m_current.
+    return m_current_node->get_content();
 }
 
 template<class T>
 void Queue<T>::Iterator::operator++() {
-    m_current = (m_current->get_next());
+    m_current_node = (m_current_node->get_next());
 }
 
 template<class T>
-Queue<T>::Iterator::Iterator(Queue<T> *queue, Node<T> *node) : m_queue(queue), m_current(node) {
+Queue<T>::Iterator::Iterator(Queue<T> *queue, Node<T> *node) : m_queue(queue), m_current_node(node) {
     //this.m_queue = address of input m_queue.
 }
 
@@ -119,6 +144,38 @@ typename Queue<T>::Iterator Queue<T>::begin() {
 template<class T>
 typename Queue<T>::Iterator Queue<T>::end() {
     return Iterator(this, nullptr);
+}
+
+
+
+//-------------------implementation of Queue::ConstIterator operators----------------------------//
+
+template<class T>
+bool Queue<T>::ConstIterator::operator!=(const Queue<T>::ConstIterator &other) {
+    if(this->m_queue != other.m_queue) //TODO: needs a "!=" operator between queues for this?
+    {
+        throw (InvalidOperation()); //throws an InvalidOperation object.
+    }
+    return m_current_node != other.m_current_node;
+}
+
+template<class T>
+T& Queue<T>::ConstIterator::operator*() {
+    if (m_current_node == nullptr)
+    {
+        throw (InvalidOperation());
+    }
+    return m_current_node->get_content();
+}
+
+template<class T>
+void Queue<T>::ConstIterator::operator++() {
+    m_current_node = (m_current_node->get_next());
+}
+
+template<class T>
+Queue<T>::ConstIterator::ConstIterator(const Queue<T> *queue, Node<T> *node) : m_queue(queue), m_current_node(node) {
+    //this.m_queue = address of input m_queue.
 }
 
 //-------------------implementation of Queue::ConstIterator functions----------------------------//
@@ -182,11 +239,15 @@ void Queue<T>::pushBack(T item) {
 
 template<class T>
 T& Queue<T>::front() {
-    if (size() > 0)
+    //returns reference because item should be changeable. e.g "queue1.front() = 3;"
+    if (size() <= 0)
+    {
+        throw (EmptyQueue());
+    }
+    else
     {
         return m_first->get_content(); //get_content returns &m_content.
     }
-    return nullptr; //no nodes so no m_content
 }
 
 template<class T>
@@ -228,8 +289,9 @@ Queue<T> filter(const Queue<T> queue, bool function(T item)){
     return new_queue;
 }
 
+//ERROR: does not actually change the objects. just changes temporary copies of them.
 template<class T>
-Queue<T> transform(const Queue<T> queue, void function(T &item)){
+void transform(Queue<T> queue, void function(T &item)){
     for (T item : queue)
     {
         function(item);
