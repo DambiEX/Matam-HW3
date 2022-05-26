@@ -1,19 +1,17 @@
 #include "HealthPoints.h"
 #include <iostream>
 
-static int fill(const int threshold, const int attribute, const int amount, int negativity) {
-    /*
-     * Fills up to a certain threshold. Or empties an int down to 0, depending on negativity.
-     */
-    if (amount <= 0) {
-        return attribute;
+static int withinBounds(int health, const int max_health){
+    if (health < 0)
+    {
+        return 0;
     }
-    int change = amount * negativity;
-    if ((attribute + change) * negativity > threshold) {
-        return threshold;
-    } else {
-        return attribute + change;
+    else if (health > max_health)
+    {
+        return max_health;
     }
+    else
+        return health;
 }
 
 HealthPoints::HealthPoints(int max_health) : max_health(max_health), health(max_health) {
@@ -29,12 +27,14 @@ HealthPoints::operator bool() const {
 
 //-------------------------------addition/subtraction operators----------------------------//
 HealthPoints &HealthPoints::operator+=(const int num) {
-    health = fill(max_health, health, num, POSITIVE);
+    health = health+num;
+    health = withinBounds(health, max_health);
     return *this;
 }
 
 HealthPoints &HealthPoints::operator-=(const int num) {
-    health = fill(0, health, num, NEGATIVE);
+    health = health-num;
+    health = withinBounds(health, max_health);
     return *this;
 }
 
@@ -65,23 +65,23 @@ bool HealthPoints::operator==(const HealthPoints other) const {
     }
 }
 
-bool HealthPoints::operator!=(HealthPoints other) const {
+bool HealthPoints::operator!=(const HealthPoints other) const {
     return !(*this == other);
 }
 
-bool HealthPoints::operator>(HealthPoints other) const {
+bool HealthPoints::operator>(const HealthPoints other) const {
     return this->health > other.health;
 }
 
-bool HealthPoints::operator<(HealthPoints other) const {
+bool HealthPoints::operator<(const HealthPoints other) const {
     return this->health < other.health;
 }
 
-bool HealthPoints::operator<=(HealthPoints other) const {
+bool HealthPoints::operator<=(const HealthPoints other) const {
     return this->health <= other.health;
 }
 
-bool HealthPoints::operator>=(HealthPoints other) const {
+bool HealthPoints::operator>=(const HealthPoints other) const {
     return this->health >= other.health;
 }
 

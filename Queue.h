@@ -339,7 +339,7 @@ void Queue<T>::pushBack(T item) {
 template<class T>
 T& Queue<T>::front() {
     //returns reference because item should be changeable. e.g "queue1.front() = 3;"
-    if (size() <= 0)
+    if (size() <= 0 || m_first == nullptr)
     {
         throw (EmptyQueue());
     }
@@ -351,7 +351,8 @@ T& Queue<T>::front() {
 
 template<class T>
 void Queue<T>::popFront() {
-    if (m_first == nullptr){
+    if (size() <= 0 || m_first == nullptr)
+    {
         throw (EmptyQueue());
     }
     Node *temp = m_first->get_next();
