@@ -1,5 +1,6 @@
 //TODO: all code conventions and naming conventions.
 //TODO: destroy Iterators in case the m_queue is changed while they exist.
+//TODO: make sure +/- functions in healthpoints dont need to be internal/external.
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
@@ -29,6 +30,11 @@ public:
     class ConstIterator;
     ConstIterator begin() const;
     ConstIterator end() const;
+
+
+    //-------------------Exceptions------------------------//
+
+    class EmptyQueue;
 
 
 private:
@@ -189,8 +195,9 @@ int Queue<T>::size() {
 
 template<class T>
 Queue<T> filter(const Queue<T> queue, bool function(T item)){
+    //TODO: argument function object needs to be bool? or maybe another template?
     Queue<T> new_queue;
-    for (T item : queue)
+    for (const T item : queue)
     {
         if (function(item))
         {
