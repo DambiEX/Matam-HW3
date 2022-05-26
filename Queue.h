@@ -194,7 +194,7 @@ typename Queue<T>::ConstIterator Queue<T>::end() const {
 //-------------------implementation of template Queue functions----------------------------//
 template<class T>
 void Queue<T>::destroyNodes(){
-    while (m_last->get_next()) {
+    while (m_first->get_next()) {
         popFront();
     }
     popFront(); //the m_last item doesn't have a "m_next" but it still needs to be deleted.
@@ -252,7 +252,7 @@ T& Queue<T>::front() {
 
 template<class T>
 void Queue<T>::popFront() {
-    if (size() <= 0){
+    if (m_first == nullptr){
         throw (EmptyQueue());
     }
     //m_queue not empty:
@@ -276,7 +276,7 @@ int Queue<T>::size() {
 //----------------------------------complex functions--------------------------------//
 
 template<class T>
-Queue<T> filter(const Queue<T> queue, bool function(T item)){
+Queue<T> filter(const Queue<T> &queue, bool function(T item)){
     //TODO: argument function object needs to be bool? or maybe another template?
     Queue<T> new_queue;
     for (const T item : queue)
@@ -291,11 +291,14 @@ Queue<T> filter(const Queue<T> queue, bool function(T item)){
 
 //ERROR: does not actually change the objects. just changes temporary copies of them.
 template<class T>
-void transform(Queue<T> queue, void function(T &item)){
-    for (T item : queue)
-    {
-        function(item);
+void transform(Queue<T> &queue, void function(T &item)){
+    for (typename Queue<T>::Iterator it = queue.begin(); it != queue.end(); ++it) {
+    function(*it);
     }
+//    for (T t : queue)
+//    {
+//        function(t);
+//    }
 }
 
 
