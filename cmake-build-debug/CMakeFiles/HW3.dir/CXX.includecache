@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/PC/Dropbox/studies/Matam/HW3/Node.h
+
+C:/Users/PC/Dropbox/studies/Matam/HW3/Queue.h
+Node.h
+C:/Users/PC/Dropbox/studies/Matam/HW3/Node.h
+stdexcept
+C:/Users/PC/Dropbox/studies/Matam/HW3/stdexcept
+
+C:/Users/PC/Dropbox/studies/Matam/HW3/QueueExampleTests.cpp
+Queue.h
+C:/Users/PC/Dropbox/studies/Matam/HW3/Queue.h
+iostream
+C:/Users/PC/Dropbox/studies/Matam/HW3/iostream
+
