@@ -1,30 +1,26 @@
 //TODO: pass by reference instead? afte watching lectures and tutorial
 
 #include "HealthPoints.h"
+#include <iostream>
 
 static int fill(const int threshold, const int attribute, const int amount, int negativity) {
     /*
      * Fills up to a certain threshold. Or empties an int down to 0, depending on negativity.
      */
-    if(amount <= 0)
-    {
+    if (amount <= 0) {
         return attribute;
     }
     int change = amount * negativity;
-    if ((attribute + change) * negativity > threshold)
-    {
+    if ((attribute + change) * negativity > threshold) {
         return threshold;
-    } else
-    {
+    } else {
         return attribute + change;
     }
 }
 
-HealthPoints::HealthPoints(int max_health) : max_health(max_health), health(max_health)
-{ //TODO: return correct error on negative input.
-    if (max_health < 0){
-        throw InvalidArgument;
-        //throw HealthPoints::InvalidArgument; //TODO: syntax
+HealthPoints::HealthPoints(int max_health) : max_health(max_health), health(max_health) {
+    if (max_health <= 0) {
+        throw HealthPoints::InvalidArgument();
     }
 }
 
@@ -64,12 +60,9 @@ HealthPoints operator-(const int num, const HealthPoints health) {
 
 //----------------------comparison operators-----------------------------//
 bool HealthPoints::operator==(const HealthPoints other) const {
-    if(this->health == other.health)
-    {
+    if (this->health == other.health) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -94,3 +87,9 @@ bool HealthPoints::operator>=(HealthPoints other) const {
     return this->health >= other.health;
 }
 
+//----------------------print operator-----------------------------//
+
+std::ostream &operator<<(std::ostream &os, HealthPoints current) {
+    os << current.health << "(" << current.max_health << ")";
+    return os;
+}
