@@ -124,6 +124,10 @@ T& Queue<T>::Iterator::operator*() {
 
 template<class T>
 void Queue<T>::Iterator::operator++() {
+    if(m_current_node == nullptr)
+    {
+        throw (InvalidOperation());
+    }
     m_current_node = (m_current_node->get_next());
 }
 
@@ -170,6 +174,10 @@ T& Queue<T>::ConstIterator::operator*() {
 
 template<class T>
 void Queue<T>::ConstIterator::operator++() {
+    if (m_current_node == nullptr)
+    {
+        throw (InvalidOperation());
+    }
     m_current_node = (m_current_node->get_next());
 }
 
