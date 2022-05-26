@@ -5,7 +5,7 @@ template<class T> class Node{
 
 public:
     explicit Node();
-    Node(const Node&);
+    Node(const Node&) = default;
     ~Node() = default;
 
     void connect_next(Node* other);
@@ -18,13 +18,11 @@ private:
     Node* m_next; //link to next node
 };
 
-template<class T>
-
 
 
 //----------------------implementation---------------------//
 
-
+template<class T>
 void Node<T>::connect_next(Node* other){
     m_next = other;
 }

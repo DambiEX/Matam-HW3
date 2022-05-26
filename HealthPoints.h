@@ -55,6 +55,6 @@ HealthPoints operator-(HealthPoints health, int num);
 //------wrong order operators just call the correct operators in the right order-----------//
 HealthPoints operator+(int num, HealthPoints health);
 
-HealthPoints operator-(const int num, const HealthPoints health); //TODO: clang tidy? const or not to const
+HealthPoints operator-(int num, HealthPoints health);
 
 #endif //HW3_HEALTHPOINTS_H

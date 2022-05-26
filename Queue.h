@@ -1,6 +1,5 @@
 //TODO: all code conventions and naming conventions.
 //TODO: destroy Iterators in case the m_queue is changed while they exist.
-//TODO: make sure +/- functions in healthpoints dont need to be internal/external.
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
@@ -16,12 +15,11 @@ public:
 
     void pushBack(T item);
     T& front(); //returns reference because item should be changeable. e.g "queue1.front() = 3;"
-//    const T& front(); //TODO: syntax. why cant i make a const version of this function like in the slides?
     void popFront();
     int size();
 
 
-    //-------------------Iterator------------------------//
+    //-------------------Internal classes------------------------//
 
     class Iterator;
     Iterator begin();
@@ -30,9 +28,6 @@ public:
     class ConstIterator;
     ConstIterator begin() const;
     ConstIterator end() const;
-
-
-    //-------------------Exceptions------------------------//
 
     class EmptyQueue;
 
@@ -106,7 +101,7 @@ template<class T> class Queue<T>::ConstIterator::InvalidOperation{};
 
 template<class T>
 bool Queue<T>::Iterator::operator!=(const Queue<T>::Iterator &other) {
-    if(this->m_queue != other.m_queue) //TODO: needs a "!=" operator between queues for this?
+    if(this->m_queue != other.m_queue) //pointer comparison
     {
         throw (InvalidOperation()); //throws an InvalidOperation object.
     }
@@ -156,7 +151,7 @@ typename Queue<T>::Iterator Queue<T>::end() {
 
 template<class T>
 bool Queue<T>::ConstIterator::operator!=(const Queue<T>::ConstIterator &other) {
-    if(this->m_queue != other.m_queue) //TODO: needs a "!=" operator between queues for this?
+    if(this->m_queue != other.m_queue) //pointer comparison
     {
         throw (InvalidOperation()); //throws an InvalidOperation object.
     }
@@ -224,14 +219,7 @@ Queue<T>::Queue(Node<T> *first_ptr, Node<T> *last_ptr) : m_nodes_amount(0), m_fi
 
 template<class T>
 void Queue<T>::pushBack(T item) {
-    Node<T> *new_node;
-//    try {
-    new_node = new Node<T>; //TODO: need to free even after bad_alloc?
-//    } //TODO: delete uselss code. destructor is called anyway and it will destroy the nodes.
-//    catch (std::bad_alloc){
-//        destroyNodes();
-//        throw;
-//    };
+    Node<T> *new_node = new Node<T>;
     new_node->set_content(item);
     if (size() == 0) //no items
     {
@@ -285,7 +273,6 @@ int Queue<T>::size() {
 
 template<class T>
 Queue<T> filter(const Queue<T> &queue, bool function(T item)){
-    //TODO: argument function object needs to be bool? or maybe another template?
     Queue<T> new_queue;
     for (const T item : queue)
     {
@@ -297,7 +284,6 @@ Queue<T> filter(const Queue<T> &queue, bool function(T item)){
     return new_queue;
 }
 
-//ERROR: does not actually change the objects. just changes temporary copies of them.
 template<class T>
 void transform(Queue<T> &queue, void function(T &item)){
     for (typename Queue<T>::Iterator it = queue.begin(); it != queue.end(); ++it) {
