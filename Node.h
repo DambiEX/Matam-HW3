@@ -15,7 +15,7 @@ public:
 
 private:
     T m_content; //an item itself, not a pointer!
-    Node* m_next; //link to m_next node
+    Node* m_next; //link to next node
 };
 
 template<class T>

@@ -91,12 +91,12 @@ bool testOutputOperator()
 
 	HealthPoints healthPoints1 = HealthPoints(100); /* has 100 points out of 100 */
 	healthPoints1 -= 50; /* now has 50 points out of 100 */
-	stream << healthPoints1; /* stream m_content is "50(100)" */
+	stream << healthPoints1; /* stream content is "50(100)" */
 	testResult = testResult && (stream.str() == "50(100)");
 
 	HealthPoints healthPoints2 = HealthPoints(150); /* has 1500 points out of 150 */
 	healthPoints2 -= 50; /* now has 100 points out of 150 */
-	stream << ", " << healthPoints2; /* stream m_content is "50(100), 100(150)" */
+	stream << ", " << healthPoints2; /* stream content is "50(100), 100(150)" */
 	testResult = testResult && (stream.str() == "50(100), 100(150)");
 
 	return testResult;

@@ -62,7 +62,6 @@ bool testModuleFunctions()
 	}
 	transform(queue5, setFortyTwo);
 	for (Queue<int>::Iterator i = queue5.begin(); i != queue5.end(); ++i) {
-        std::cout << *i;
 		AGREGATE_TEST_RESULT(testResult,(*i == 42));
 	}
 
