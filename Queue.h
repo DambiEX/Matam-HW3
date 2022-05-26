@@ -1,22 +1,27 @@
 //TODO: all code conventions and naming conventions.
-//TODO: destroy Iterators in case the m_queue is changed while they exist.
+//TODO: destroy Iterators in case the m_queue is changed while they exist? there was an answer in the piazza i think.
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
-#include "stdexcept"
 
+//---------------------------------Queue class---------------------------------------------//
 template<class T> class Queue{
+    /*
+     * This class contains a linked list of T objects. Every node in the list contains one T
+     * as its content. The items are taken out of the Queue in FIFO: first in first out. So
+     * new nodes are connected to the last node, while when nodes are removed they are removed
+     * from the first node.
+     */
 private:
     class Node;
     Node* m_first;
     Node* m_last;
     int m_nodes_amount;
 
-    void destroyNodes();
 public:
     explicit Queue(Node *first_ptr = nullptr, Node *last_ptr = nullptr); //constructor
-    Queue(const Queue&) = default; //copy constructor
-    Queue& operator=(const Queue&) = default;
+    Queue(const Queue&) = default; //copy constructor. It works so don't change it?
+    Queue& operator=(const Queue&) = default; //assignment operator
     ~Queue(); //destructor
 
     void pushBack(T item);
@@ -60,7 +65,7 @@ private:
 };
 
 
-//----------------------implementation---------------------//
+//--------------------------------Node implementation--------------------------------------//
 
 template<class T>
 void Queue<T>::Node::connect_next(Node* other){
@@ -89,7 +94,6 @@ void Queue<T>::Node::set_content(T item) {
 
 
 //---------------------------------Iterator class------------------------------------------//
-
 template<class T> class Queue<T>::Iterator {
 public:
     Iterator(const Iterator&) = default;
@@ -144,6 +148,7 @@ template<class T> class Queue<T>::Iterator::InvalidOperation{};
 template<class T> class Queue<T>::ConstIterator::InvalidOperation{};
 
 
+
 //-------------------implementation of Queue::Iterator operators----------------------------//
 
 template<class T>
@@ -177,6 +182,7 @@ template<class T>
 Queue<T>::Iterator::Iterator(Queue<T> *queue, Node *node) : m_queue(queue), m_current_node(node) {
     //this.m_queue = address of input m_queue.
 }
+
 
 
 //-------------------implementation of Queue::Iterator functions----------------------------//
@@ -228,6 +234,7 @@ Queue<T>::ConstIterator::ConstIterator(const Queue<T> *queue, Node *node) : m_qu
     //this.m_queue = address of input m_queue.
 }
 
+
 //-------------------implementation of Queue::ConstIterator functions----------------------------//
 
 template<class T>
@@ -242,27 +249,21 @@ typename Queue<T>::ConstIterator Queue<T>::end() const {
 
 
 //-------------------implementation of template Queue functions----------------------------//
+
 template<class T>
-void Queue<T>::destroyNodes(){
-    while (m_first->get_next()) {
-        popFront();
-    }
-    popFront(); //the m_last item doesn't have a "m_next" but it still needs to be deleted.
+Queue<T>::Queue(Queue::Node *first_ptr, Queue::Node *last_ptr) : m_nodes_amount(0), m_first(first_ptr), m_last(last_ptr){
 }
 
 template<class T>
 Queue<T>::~Queue() {
     if (size() > 0)
     {
-        destroyNodes();
+        while (m_first->get_next()) {
+            popFront();
+        }
+        popFront(); //the m_last item doesn't have a "m_next" but it still needs to be deleted.
     }
 }
-
-template<class T>
-Queue<T>::Queue(Queue::Node *first_ptr, Queue::Node *last_ptr) : m_nodes_amount(0), m_first(first_ptr), m_last(last_ptr){
-
-}
-
 
 template<class T>
 void Queue<T>::pushBack(T item) {
@@ -312,11 +313,7 @@ int Queue<T>::size() {
 
 
 
-
-
-
-
-//----------------------------------complex functions--------------------------------//
+//----------------------------------complicated functions--------------------------------//
 
 template<class T>
 Queue<T> filter(const Queue<T> &queue, bool function(T item)){

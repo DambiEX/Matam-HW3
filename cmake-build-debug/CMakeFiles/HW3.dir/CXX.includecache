@@ -7,8 +7,6 @@
 #IncludeRegexTransform: 
 
 C:/Users/PC/Dropbox/studies/Matam/HW3/Queue.h
-stdexcept
-C:/Users/PC/Dropbox/studies/Matam/HW3/stdexcept
 
 C:/Users/PC/Dropbox/studies/Matam/HW3/QueueExampleTests.cpp
 Queue.h
