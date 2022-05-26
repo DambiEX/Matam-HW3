@@ -8,7 +8,6 @@ CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj: \
  ../HealthPoints.h \
  ../HealthPointsExampleTest.cpp
 CMakeFiles/HW3.dir/QueueExampleTests.cpp.obj: \
- ../Node.h \
  ../Queue.h \
  ../QueueExampleTests.cpp
 CMakeFiles/HW3.dir/TestMain.cpp.obj: \

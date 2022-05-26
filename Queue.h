@@ -3,12 +3,18 @@
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
-#include "Node.h"
 #include "stdexcept"
 
 template<class T> class Queue{
+private:
+    class Node;
+    Node* m_first;
+    Node* m_last;
+    int m_nodes_amount;
+
+    void destroyNodes();
 public:
-    explicit Queue(Node<T> *first_ptr = nullptr, Node<T> *last_ptr = nullptr); //constructor
+    explicit Queue(Node *first_ptr = nullptr, Node *last_ptr = nullptr); //constructor
     Queue(const Queue&) = default; //copy constructor
     Queue& operator=(const Queue&) = default;
     ~Queue(); //destructor
@@ -31,13 +37,54 @@ public:
 
     class EmptyQueue;
 
-private:
-    Node<T>* m_first;
-    Node<T>* m_last;
-    int m_nodes_amount;
 
-    void destroyNodes();
 };
+
+
+//---------------------------------Node class----------------------------------------------//
+template<class T> class Queue<T>::Node{
+
+public:
+    explicit Node();
+    Node(const Node&) = default;
+    ~Node() = default;
+
+    void connect_next(Node* other);
+    Node* get_next();
+    T& get_content(); //returns reference because item should be changeable. e.g "queue1.front() = 3;"
+    void set_content(T item);
+
+private:
+    T m_content; //an item itself, not a pointer!
+    Node* m_next; //link to next node
+};
+
+
+//----------------------implementation---------------------//
+
+template<class T>
+void Queue<T>::Node::connect_next(Node* other){
+    m_next = other;
+}
+
+template<class T>
+Queue<T>::Node::Node() : m_content(), m_next(nullptr)  {
+}
+
+template<class T>
+T& Queue<T>::Node::get_content() { //returns reference because item should be changeable. e.g "queue1.front() = 3;"
+    return m_content;
+}
+
+template<class T>
+typename Queue<T>::Node *Queue<T>::Node::get_next() {
+    return m_next;
+}
+
+template<class T>
+void Queue<T>::Node::set_content(T item) {
+    m_content = item;
+}
 
 
 
@@ -58,9 +105,9 @@ public:
     class InvalidOperation;
 
 private:
-    explicit Iterator(Queue<T> *queue, Node<T> *node); //Iterator can only be initialized with begin() and end()
+    explicit Iterator(Queue<T> *queue, Node *node); //Iterator can only be initialized with begin() and end()
     const Queue<T>* m_queue;
-    Node<T>* m_current_node;
+    Node* m_current_node;
 
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
@@ -81,9 +128,9 @@ public:
     class InvalidOperation;
 
 private:
-    explicit ConstIterator(const Queue<T> *queue, Node<T> *node); //ConstIterator can only be initialized with begin() and end()
+    explicit ConstIterator(const Queue<T> *queue, Node *node); //ConstIterator can only be initialized with begin() and end()
     const Queue<T>* m_queue;
-    Node<T>* m_current_node;
+    Node* m_current_node;
 
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
@@ -127,7 +174,7 @@ void Queue<T>::Iterator::operator++() {
 }
 
 template<class T>
-Queue<T>::Iterator::Iterator(Queue<T> *queue, Node<T> *node) : m_queue(queue), m_current_node(node) {
+Queue<T>::Iterator::Iterator(Queue<T> *queue, Node *node) : m_queue(queue), m_current_node(node) {
     //this.m_queue = address of input m_queue.
 }
 
@@ -177,7 +224,7 @@ void Queue<T>::ConstIterator::operator++() {
 }
 
 template<class T>
-Queue<T>::ConstIterator::ConstIterator(const Queue<T> *queue, Node<T> *node) : m_queue(queue), m_current_node(node) {
+Queue<T>::ConstIterator::ConstIterator(const Queue<T> *queue, Node *node) : m_queue(queue), m_current_node(node) {
     //this.m_queue = address of input m_queue.
 }
 
@@ -212,14 +259,14 @@ Queue<T>::~Queue() {
 }
 
 template<class T>
-Queue<T>::Queue(Node<T> *first_ptr, Node<T> *last_ptr) : m_nodes_amount(0), m_first(first_ptr), m_last(last_ptr){
+Queue<T>::Queue(Queue::Node *first_ptr, Queue::Node *last_ptr) : m_nodes_amount(0), m_first(first_ptr), m_last(last_ptr){
 
 }
 
 
 template<class T>
 void Queue<T>::pushBack(T item) {
-    Node<T> *new_node = new Node<T>;
+    Node *new_node = new Node;
     new_node->set_content(item);
     if (size() == 0) //no items
     {
@@ -252,7 +299,7 @@ void Queue<T>::popFront() {
         throw (EmptyQueue());
     }
     //m_queue not empty:
-    Node<T> *temp = m_first->get_next();
+    Node *temp = m_first->get_next();
     delete m_first;
     m_first = temp; //even if temp == nullptr we still want the m_first item to point there.
     --m_nodes_amount;
