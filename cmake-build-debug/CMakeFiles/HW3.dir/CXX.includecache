@@ -16,6 +16,12 @@ C:/Users/PC/Dropbox/studies/Matam/HW3/HealthPoints.h
 iostream
 -
 
+C:/Users/PC/Dropbox/studies/Matam/HW3/HealthPointsExampleTest.cpp
+sstream
+-
+HealthPoints.h
+C:/Users/PC/Dropbox/studies/Matam/HW3/HealthPoints.h
+
 C:/Users/PC/Dropbox/studies/Matam/HW3/Queue.h
 
 C:/Users/PC/Dropbox/studies/Matam/HW3/QueueExampleTests.cpp
@@ -23,4 +29,16 @@ Queue.h
 C:/Users/PC/Dropbox/studies/Matam/HW3/Queue.h
 iostream
 C:/Users/PC/Dropbox/studies/Matam/HW3/iostream
+
+C:/Users/PC/Dropbox/studies/Matam/HW3/TestMain.cpp
+functional
+-
+TestUtils.h
+C:/Users/PC/Dropbox/studies/Matam/HW3/TestUtils.h
+
+C:/Users/PC/Dropbox/studies/Matam/HW3/TestUtils.h
+functional
+-
+iostream
+-
 

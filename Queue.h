@@ -1,4 +1,5 @@
 //TODO: all code conventions and naming conventions.
+//TODO: make ++ of the itarotr return an iterator reference instead of void
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
@@ -17,14 +18,14 @@ private:
     class Node;
     Node* m_first;
     Node* m_last;
-    int m_nodes_amount;
+    int m_size;
 
     //constructors helper functions:
     void copyNodes(const Queue<T> &source);
     void deleteNodes();
 
 public:
-    explicit Queue(Node *first_ptr = nullptr, Node *last_ptr = nullptr); //constructor
+    explicit Queue(Node *first_ptr = nullptr, Node *last_ptr = nullptr); //constructor //TODO: remove the arguments
     Queue(const Queue& other); //copy constructor
     Queue& operator=(const Queue& other); //assignment operator
     ~Queue(); //destructor
@@ -102,15 +103,13 @@ public:
     bool operator!=(const Iterator &other); //comparison between different Iterators
     T& operator*(); //retrieval of m_content
     void operator++(); //prefix ++ operator
-
     class InvalidOperation{}; //exception class
 
 private:
+    friend class Queue<T>; //friend is needed in order for Queue to call begin() and end()
     explicit Iterator(Queue<T> *queue, Node *node); //Iterator can only be initialized with begin() and end()
     const Queue<T>* m_queue; //the queue this iterates on
     Node* m_current_node; //the node the operator is pointing on
-
-    friend class Queue<T>; //friend is needed in order for Queue to call begin() and end()
 };
 
 //---------------------------------ConstIterator class------------------------------------------//
@@ -132,8 +131,8 @@ public:
 
 private:
     explicit ConstIterator(const Queue<T> *queue, Node *node); //ConstIterator can only be initialized with begin() and end()
-    const Queue<T>* m_queue;
-    Node* m_current_node;
+    const Queue<T>* m_queue; //TODO: const Queue<T>* ---const--- ?
+    Node* m_current_node; //TODO: Node* const?
 
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
@@ -147,12 +146,12 @@ private:
 //--------------------------------Node implementation--------------------------------------//
 
 template<class T>
-void Queue<T>::Node::connect_next(Node* other){
-    m_next = other;
+Queue<T>::Node::Node() : m_content(), m_next(nullptr)  {
 }
 
 template<class T>
-Queue<T>::Node::Node() : m_content(), m_next(nullptr)  {
+void Queue<T>::Node::connect_next(Node* other){
+    m_next = other;
 }
 
 template<class T>
@@ -167,7 +166,7 @@ typename Queue<T>::Node *Queue<T>::Node::get_next() {
 
 template<class T>
 void Queue<T>::Node::set_content(T item) {
-    m_content = item;
+    m_content = item; //TODO: maybe avoid using T's assignment operator and use only its copy constructor.
 }
 
 
@@ -203,7 +202,6 @@ void Queue<T>::Iterator::operator++() {
 template<class T>
 Queue<T>::Iterator::Iterator(Queue<T> *queue, Node *node) : m_queue(queue), m_current_node(node) {
 }
-
 
 
 //-------------------implementation of Queue::Iterator functions----------------------------//
@@ -273,7 +271,7 @@ typename Queue<T>::ConstIterator Queue<T>::end() const {
 //-------------------implementation of template Queue functions----------------------------//
 
 template<class T>
-Queue<T>::Queue(Queue::Node *first_ptr, Queue::Node *last_ptr) : m_nodes_amount(0), m_first(first_ptr), m_last(last_ptr){
+Queue<T>::Queue(Queue::Node *first_ptr, Queue::Node *last_ptr) : m_size(0), m_first(first_ptr), m_last(last_ptr){
 }
 
 template<class T>
@@ -297,7 +295,7 @@ void Queue<T>::deleteNodes(){
 }
 
 template<class T>
-Queue<T>::Queue(const Queue &other) : m_nodes_amount(0), m_first(nullptr), m_last(nullptr)
+Queue<T>::Queue(const Queue &other) : m_size(0), m_first(nullptr), m_last(nullptr)
 {
     copyNodes(other);
 }
@@ -323,7 +321,6 @@ Queue<T>& Queue<T>::operator=(const Queue &other) {
 template<class T>
 void Queue<T>::pushBack(T item) {
     Node *new_node = new Node; //in case of bad_alloc, memory is freed from the Queue destructor.
-    new_node->set_content(item);
     if (size() == 0) //no items
     {
         m_first = new_node;
@@ -333,7 +330,8 @@ void Queue<T>::pushBack(T item) {
         m_last->connect_next(new_node);
     }
     m_last = new_node;
-    ++m_nodes_amount;
+    ++m_size;
+    new_node->set_content(item);
 }
 
 template<class T>
@@ -358,12 +356,12 @@ void Queue<T>::popFront() {
     Node *temp = m_first->get_next();
     delete m_first;
     m_first = temp; //even if temp == nullptr we still want the m_first item to point there.
-    --m_nodes_amount;
+    --m_size;
 }
 
 template<class T>
 int Queue<T>::size() {
-    return m_nodes_amount;
+    return m_size;
 }
 
 
