@@ -311,20 +311,21 @@ Queue<T>& Queue<T>::operator=(const Queue &other) {
     }
     else
     {
-        deleteNodes();
-        copyNodes(other);
+        Queue<T> temp;
+        temp.copyNodes(other);
+        temp.m_size = 0; //so nodes won't be destroyed by the destructor.
+        this->deleteNodes();
+        m_first = temp.m_first;
+        m_last = temp.m_last;
+        m_size = other.size();
     }
 }
 
 template<class T>
-void Queue<T>::pushBack(const T item) {
-    Node *new_node;
+void Queue<T>::pushBack(const T item) {  //TODO: handle errors correctly. check exactly what the staff wants.
+    Node *new_node = nullptr;
     try {
         new_node = new Node(item); //in case of bad_alloc, memory is freed from the Queue destructor.
-    }
-    catch (std::bad_alloc&)
-    {
-        throw; //no need to free, because allocation failed.
     }
     catch (...) //allocation succeeded, construction of T failed.
     {
