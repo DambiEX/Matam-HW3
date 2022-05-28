@@ -282,7 +282,7 @@ void Queue<T>::copyNodes(const Queue<T>& source){
 
 template<class T>
 void Queue<T>::deleteNodes(){
-    if (size() > 0)
+    if (size() > 0) //DO NOT CHANGE TO POINTER EVALUATION. In some rare cases, size is superficially set to 0.
     {
         while (m_first->get_next()) {
             popFront();
@@ -322,24 +322,7 @@ Queue<T>& Queue<T>::operator=(const Queue &other) {
 
 template<class T>
 void Queue<T>::pushBack(const T item) {
-    //TODO: handle errors correctly. check exactly what the staff wants.
-    /*
-     * problem statement for the TODO:
-     * what if the memory allocation succeeds, but then something fails within the T constructor?
-     * even if that does not count as allocation success, what exception is thrown? if its not bad alloc
-     * since the error happend in the constructor and not during allocation, do i return bad alloc
-     * or the mysterious T error?
-     */
-    Node *new_node = nullptr;
-    try {
-        new_node = new Node(item); //in case of bad_alloc, memory is freed from the Queue destructor.
-    }
-    catch (...) //allocation succeeded, construction of T failed.
-    {
-        delete new_node;
-        throw;
-    }
-
+    Node *new_node = new Node(item); //in case of bad_alloc, memory is freed from the Queue destructor.
     //allocation and construction succeeded
     if (size() == 0) //no items
     {
