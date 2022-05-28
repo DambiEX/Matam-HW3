@@ -2,8 +2,10 @@
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
+#include <new>
 
 //----------------------------------DECLARATIONS-------------------------------------------//
+
 
 //---------------------------------Queue class---------------------------------------------//
 template<class T> class Queue{
@@ -68,7 +70,7 @@ public:
 //---------------------------------Node class----------------------------------------------//
 template<class T> class Queue<T>::Node{
 public:
-    explicit Node();
+    explicit Node(const T& content);
     Node(const Node&) = delete; //nodes can't be copied! content must be copied manually.
     ~Node() = default;
 
@@ -85,7 +87,6 @@ public:
      * cant be const because item can be changed.
      */
     T& get_content();
-    void set_content(const T& item);
 
 private:
     T m_content; //an item itself, not a pointer!
@@ -146,7 +147,7 @@ private:
 //--------------------------------Node implementation--------------------------------------//
 
 template<class T>
-Queue<T>::Node::Node() : m_content(), m_next(nullptr)  {
+Queue<T>::Node::Node(const T& content) : m_content(content)/*copy constructor*/, m_next(nullptr)  {
 }
 
 template<class T>
@@ -162,11 +163,6 @@ T& Queue<T>::Node::get_content(){ //returns reference because item should be cha
 template<class T>
 typename Queue<T>::Node *Queue<T>::Node::get_next() const {
     return m_next;
-}
-
-template<class T>
-void Queue<T>::Node::set_content(const T& item) {
-    m_content = item;
 }
 
 
@@ -322,28 +318,29 @@ Queue<T>& Queue<T>::operator=(const Queue &other) {
 
 template<class T>
 void Queue<T>::pushBack(const T item) {
-    Node *new_node = new Node; //in case of bad_alloc, memory is freed from the Queue destructor.
+    Node *new_node;
     try {
-        if (size() == 0) //no items
-        {
-            m_first = new_node;
-        }
-        else
-        {
-            m_last->connect_next(new_node);
-        }
-        m_last = new_node;
-        ++m_size;
+        new_node = new Node(item); //in case of bad_alloc, memory is freed from the Queue destructor.
     }
-    catch (...){
+    catch (std::bad_alloc&)
+    {
+        throw; //no need to free, because allocation failed.
+    }
+    catch (...) //allocation succeeded, construction of T failed.
+    {
         delete new_node;
         throw;
     }
-    if (new_node)
-    {
-        new_node->set_content(item);
-    }
 
+    //allocation and construction succeeded
+    if (size() == 0) //no items
+    {
+        m_first = new_node;
+    } else {
+        m_last->connect_next(new_node);
+    }
+    m_last = new_node;
+    ++m_size;
 }
 
 template<class T>
