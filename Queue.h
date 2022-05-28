@@ -25,7 +25,7 @@ private:
     void deleteNodes();
 
 public:
-    explicit Queue(Node *first_ptr = nullptr, Node *last_ptr = nullptr); //constructor //TODO: remove the arguments
+    explicit Queue(); //constructor
     Queue(const Queue& other); //copy constructor
     Queue& operator=(const Queue& other); //assignment operator
     ~Queue(); //destructor
@@ -80,12 +80,12 @@ public:
     /*
      * may return nullptr if this node is not connected to anything
      */
-    Node* get_next();
+    Node* get_next() const;
     /*
      * returns reference because it can be used to change the item. e.g. "queue1.front() = 3;"
      */
-    T& get_content();
-    void set_content(T item);
+    T& get_content() const;
+    void set_content(const T& item);
 
 private:
     T m_content; //an item itself, not a pointer!
@@ -131,8 +131,8 @@ public:
 
 private:
     explicit ConstIterator(const Queue<T> *queue, Node *node); //ConstIterator can only be initialized with begin() and end()
-    const Queue<T>* m_queue; //TODO: const Queue<T>* ---const--- ?
-    Node* m_current_node; //TODO: Node* const?
+    const Queue<T>* const m_queue;
+    const Node* m_current_node;
 
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
@@ -155,18 +155,18 @@ void Queue<T>::Node::connect_next(Node* other){
 }
 
 template<class T>
-T& Queue<T>::Node::get_content() { //returns reference because item should be changeable. e.g "queue1.front() = 3;"
+T& Queue<T>::Node::get_content() const { //returns reference because item should be changeable. e.g "queue1.front() = 3;"
     return m_content;
 }
 
 template<class T>
-typename Queue<T>::Node *Queue<T>::Node::get_next() {
+typename Queue<T>::Node *Queue<T>::Node::get_next() const {
     return m_next;
 }
 
 template<class T>
-void Queue<T>::Node::set_content(T item) {
-    m_content = item; //TODO: maybe avoid using T's assignment operator and use only its copy constructor.
+void Queue<T>::Node::set_content(const T& item) {
+    m_content = item;
 }
 
 
@@ -271,7 +271,7 @@ typename Queue<T>::ConstIterator Queue<T>::end() const {
 //-------------------implementation of template Queue functions----------------------------//
 
 template<class T>
-Queue<T>::Queue(Queue::Node *first_ptr, Queue::Node *last_ptr) : m_size(0), m_first(first_ptr), m_last(last_ptr){
+Queue<T>::Queue() : m_size(0), m_first(nullptr), m_last(nullptr){
 }
 
 template<class T>
@@ -319,19 +319,29 @@ Queue<T>& Queue<T>::operator=(const Queue &other) {
 }
 
 template<class T>
-void Queue<T>::pushBack(T item) {
+void Queue<T>::pushBack(const T item) {
     Node *new_node = new Node; //in case of bad_alloc, memory is freed from the Queue destructor.
-    if (size() == 0) //no items
-    {
-        m_first = new_node;
+    try {
+        if (size() == 0) //no items
+        {
+            m_first = new_node;
+        }
+        else
+        {
+            m_last->connect_next(new_node);
+        }
+        m_last = new_node;
+        ++m_size;
     }
-    else
-    {
-        m_last->connect_next(new_node);
+    catch (...){
+        delete new_node;
+        throw;
     }
-    m_last = new_node;
-    ++m_size;
-    new_node->set_content(item);
+    if (new_node)
+    {
+        new_node->set_content(item);
+    }
+
 }
 
 template<class T>
