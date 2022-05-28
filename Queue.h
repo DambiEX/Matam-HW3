@@ -83,8 +83,9 @@ public:
     Node* get_next() const;
     /*
      * returns reference because it can be used to change the item. e.g. "queue1.front() = 3;"
+     * cant be const because item can be changed.
      */
-    T& get_content() const;
+    T& get_content();
     void set_content(const T& item);
 
 private:
@@ -132,7 +133,7 @@ public:
 private:
     explicit ConstIterator(const Queue<T> *queue, Node *node); //ConstIterator can only be initialized with begin() and end()
     const Queue<T>* const m_queue;
-    const Node* m_current_node;
+    Node* m_current_node;
 
     friend class Queue<T>; //friend is needed to call begin() and end()
 };
@@ -155,7 +156,7 @@ void Queue<T>::Node::connect_next(Node* other){
 }
 
 template<class T>
-T& Queue<T>::Node::get_content() const { //returns reference because item should be changeable. e.g "queue1.front() = 3;"
+T& Queue<T>::Node::get_content(){ //returns reference because item should be changeable. e.g "queue1.front() = 3;"
     return m_content;
 }
 
