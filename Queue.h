@@ -2,7 +2,6 @@
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
-#include <new>
 
 //----------------------------------DECLARATIONS-------------------------------------------//
 
@@ -322,7 +321,15 @@ Queue<T>& Queue<T>::operator=(const Queue &other) {
 }
 
 template<class T>
-void Queue<T>::pushBack(const T item) {  //TODO: handle errors correctly. check exactly what the staff wants.
+void Queue<T>::pushBack(const T item) {
+    //TODO: handle errors correctly. check exactly what the staff wants.
+    /*
+     * problem statement for the TODO:
+     * what if the memory allocation succeeds, but then something fails within the T constructor?
+     * even if that does not count as allocation success, what exception is thrown? if its not bad alloc
+     * since the error happend in the constructor and not during allocation, do i return bad alloc
+     * or the mysterious T error?
+     */
     Node *new_node = nullptr;
     try {
         new_node = new Node(item); //in case of bad_alloc, memory is freed from the Queue destructor.
