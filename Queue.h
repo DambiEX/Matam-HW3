@@ -1,5 +1,4 @@
 //TODO: all code conventions and naming conventions.
-//TODO: make ++ of the itarotr return an iterator reference instead of void
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
@@ -103,7 +102,7 @@ public:
 
     bool operator!=(const Iterator &other); //comparison between different Iterators
     T& operator*(); //retrieval of m_content
-    void operator++(); //prefix ++ operator
+    Iterator& operator++(); //prefix ++ operator
     class InvalidOperation{}; //exception class
 
 private:
@@ -126,7 +125,7 @@ public:
 
     bool operator!=(const ConstIterator &other); //comparison between different ConstIterators
     T& operator*(); //retrieval of m_content
-    void operator++(); //prefix ++ operator
+    ConstIterator& operator++(); //prefix ++ operator
 
     class InvalidOperation{}; //exception class
 
@@ -192,12 +191,13 @@ T& Queue<T>::Iterator::operator*() {
 }
 
 template<class T>
-void Queue<T>::Iterator::operator++() {
+typename Queue<T>::Iterator& Queue<T>::Iterator::operator++() {
     if(m_current_node == nullptr)
     {
         throw (InvalidOperation());
     }
     m_current_node = (m_current_node->get_next());
+    return *this;
 }
 
 template<class T>
@@ -245,12 +245,13 @@ T& Queue<T>::ConstIterator::operator*() {
 }
 
 template<class T>
-void Queue<T>::ConstIterator::operator++() {
+typename Queue<T>::ConstIterator& Queue<T>::ConstIterator::operator++() {
     if (m_current_node == nullptr)
     {
         throw (InvalidOperation());
     }
     m_current_node = (m_current_node->get_next());
+    return *this;
 }
 
 
