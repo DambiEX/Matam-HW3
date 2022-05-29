@@ -147,6 +147,7 @@ class Queue<T>::ConstIterator {
      */
 public:
     ConstIterator(const ConstIterator &) = default;
+    ConstIterator(const Iterator &);
 
     ~ConstIterator() = default;
 
@@ -292,7 +293,7 @@ typename Queue<T>::ConstIterator Queue<T>::ConstIterator::operator++(int) {
     if (m_current_node == nullptr) {
         throw (InvalidOperation());
     }
-    Iterator result = *this;
+    ConstIterator result = *this;
     m_current_node = (m_current_node->get_next());
     return result;
 }
@@ -435,8 +436,8 @@ Queue<T> filter(const Queue<T> &queue, P pred){
     return new_queue;
 }
 
-template<class T>
-void transform(Queue<T> &queue, void function(T &item)) {
+template<typename T, typename P>
+void transform(Queue<T> &queue, P function) {
     //can't use range based for loop because it needs *it and not it.
     for (typename Queue<T>::Iterator it = queue.begin(); it != queue.end(); ++it) {
         function(*it);

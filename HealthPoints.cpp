@@ -91,3 +91,11 @@ std::ostream &operator<<(std::ostream &os, HealthPoints current) {
     os << current.health << "(" << current.max_health << ")";
     return os;
 }
+
+bool HealthPoints::operator==(int num) const {
+    return health == num;
+}
+
+HealthPoints operator==(int num, HealthPoints health){
+    return health == num;
+}

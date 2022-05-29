@@ -25,6 +25,8 @@ public:
     //--------------comparison operators----------------//
     bool operator==(HealthPoints other) const;
 
+    bool operator==(int num) const;
+
     bool operator!=(HealthPoints other) const;
 
     bool operator>(HealthPoints other) const;
@@ -51,5 +53,7 @@ HealthPoints operator-(HealthPoints health, int num);
 HealthPoints operator+(int num, HealthPoints health);
 
 HealthPoints operator-(int num, HealthPoints health);
+
+HealthPoints operator==(int num, HealthPoints health);
 
 #endif //HW3_HEALTHPOINTS_H
