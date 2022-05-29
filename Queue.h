@@ -342,7 +342,7 @@ void Queue<T>::deleteNodes() {
 
 template<class T>
 Queue<T>::Queue(const Queue &other) : m_size(0), m_first(nullptr), m_last(nullptr) {
-    copyNodes(other);
+    *this = other;
 }
 
 template<class T>
