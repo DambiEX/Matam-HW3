@@ -1,4 +1,6 @@
 //TODO: all code conventions and naming conventions.
+//TODO: double templates for transform.
+//TODO: iterator postfix ++ function just to compile the tests.
 
 #ifndef HW3_QUEUE_H
 #define HW3_QUEUE_H
@@ -18,9 +20,10 @@ class Queue {
 private:
     class Node;
 
+    int m_size;
     Node *m_first;
     Node *m_last;
-    int m_size;
+
 
     //constructors helper functions:
     void copyNodes(const Queue<T> &source);
@@ -45,6 +48,11 @@ public:
     T &front();
 
     /*
+     * const version in case we don't want to change the item.
+     */
+    T front() const;
+
+    /*
      * destroys the first node. Error in case the queue is empty.
      */
     void popFront();
@@ -52,7 +60,7 @@ public:
     /*
      * returns the number of nodes in the queue.
      */
-    int size();
+    int size() const;
 
 
     //-------------------Internal classes------------------------//
@@ -120,6 +128,7 @@ public:
     bool operator!=(const Iterator &other); //comparison between different Iterators
     T &operator*(); //retrieval of m_content
     Iterator &operator++(); //prefix ++ operator
+    Iterator operator++(int);
     class InvalidOperation {
     }; //exception class
 
@@ -146,6 +155,7 @@ public:
     bool operator!=(const ConstIterator &other); //comparison between different ConstIterators
     T &operator*(); //retrieval of m_content
     ConstIterator &operator++(); //prefix ++ operator
+    ConstIterator operator++(int);
 
     class InvalidOperation {
     }; //exception class
@@ -219,6 +229,16 @@ template<class T>
 Queue<T>::Iterator::Iterator(Queue<T> *queue, Node *node) : m_queue(queue), m_current_node(node) {
 }
 
+template<class T>
+typename Queue<T>::Iterator Queue<T>::Iterator::operator++(int) {
+    if (m_current_node == nullptr) {
+        throw (InvalidOperation());
+    }
+    Iterator result = *this;
+    m_current_node = (m_current_node->get_next());
+    return result;
+}
+
 
 //-------------------implementation of Queue::Iterator functions----------------------------//
 
@@ -265,6 +285,16 @@ typename Queue<T>::ConstIterator &Queue<T>::ConstIterator::operator++() {
     }
     m_current_node = (m_current_node->get_next());
     return *this;
+}
+
+template<class T>
+typename Queue<T>::ConstIterator Queue<T>::ConstIterator::operator++(int) {
+    if (m_current_node == nullptr) {
+        throw (InvalidOperation());
+    }
+    Iterator result = *this;
+    m_current_node = (m_current_node->get_next());
+    return result;
 }
 
 
@@ -331,6 +361,7 @@ Queue<T> &Queue<T>::operator=(const Queue &other) {
         m_first = temp.m_first;
         m_last = temp.m_last;
         m_size = other.size();
+        return *this; //TODO: maybe need to return something else?
     }
 }
 
@@ -370,10 +401,18 @@ void Queue<T>::popFront() {
 }
 
 template<class T>
-int Queue<T>::size() {
+int Queue<T>::size() const {
     return m_size;
 }
 
+template<class T>
+T Queue<T>::front() const {
+    if (size() <= 0 || m_first == nullptr) {
+        throw (EmptyQueue());
+    } else {
+        return m_first->get_content(); //get_content returns &m_content.
+    }
+}
 
 
 //----------------------------------complicated functions--------------------------------//
