@@ -9,7 +9,7 @@ public:
     class InvalidArgument {
     };
 
-    static const int DEFAULT_HEALTH = 100, NEGATIVE = -1, POSITIVE = 1;
+    static const int DEFAULT_HEALTH = 100;
 
     HealthPoints(int max_health = DEFAULT_HEALTH); //non-explicit on purpose.
     HealthPoints(const HealthPoints &) = default; //assignment constructor
@@ -54,6 +54,11 @@ HealthPoints operator+(int num, HealthPoints health);
 
 HealthPoints operator-(int num, HealthPoints health);
 
-HealthPoints operator==(int num, HealthPoints health);
+bool operator==(int num, HealthPoints health);
+bool operator>=(int num, HealthPoints health);
+bool operator<=(int num, HealthPoints health);
+bool operator>(int num, HealthPoints health);
+bool operator<(int num, HealthPoints health);
+bool operator!=(int num, HealthPoints health);
 
 #endif //HW3_HEALTHPOINTS_H

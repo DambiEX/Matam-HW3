@@ -85,6 +85,10 @@ bool HealthPoints::operator>=(const HealthPoints other) const {
     return this->health >= other.health;
 }
 
+bool HealthPoints::operator==(const int num) const {
+    return health == num;
+}
+
 //----------------------print operator-----------------------------//
 
 std::ostream &operator<<(std::ostream &os, HealthPoints current) {
@@ -92,10 +96,28 @@ std::ostream &operator<<(std::ostream &os, HealthPoints current) {
     return os;
 }
 
-bool HealthPoints::operator==(int num) const {
+bool operator==(int num, const HealthPoints health)
+{
     return health == num;
 }
 
-HealthPoints operator==(int num, HealthPoints health){
-    return health == num;
+bool operator!=(int num, HealthPoints health) {
+    return health != num;
 }
+
+bool operator>=(int num, HealthPoints health) {
+    return !(health < num);
+}
+
+bool operator<=(int num, HealthPoints health) {
+    return !(health > num);
+}
+
+bool operator>(int num, HealthPoints health) {
+    return !(health <= num);
+}
+
+bool operator<(int num, HealthPoints health) {
+    return !(health >= num);
+}
+

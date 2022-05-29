@@ -89,6 +89,7 @@ bool testComparisonOperators()
 	healthPoints1 -= 50; /* now has 50 points out of 100 */
 	comparisonResult = (healthPoints1 < healthPoints2); /* returns true */
 
+
 	return testResult;
 }
 

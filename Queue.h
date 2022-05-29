@@ -362,7 +362,7 @@ Queue<T> &Queue<T>::operator=(const Queue &other) {
         m_first = temp.m_first;
         m_last = temp.m_last;
         m_size = other.size();
-        return *this; //TODO: maybe need to return something else?
+        return *this;
     }
 }
 
@@ -370,14 +370,21 @@ template<class T>
 void Queue<T>::pushBack(const T item) {
     Node *new_node = new Node(item); //in case of bad_alloc, memory is freed from the Queue destructor.
     //allocation and construction succeeded
-    if (size() == 0) //no items
-    {
-        m_first = new_node;
-    } else {
-        m_last->connect_next(new_node);
+    try {
+        if (size() == 0) //no items
+        {
+            m_first = new_node;
+        } else {
+            m_last->connect_next(new_node);
+        }
+        m_last = new_node;
+        ++m_size;
     }
-    m_last = new_node;
-    ++m_size;
+    catch (...) {
+        delete new_node;
+        m_last->connect_next(nullptr);
+        throw;
+    }
 }
 
 template<class T>
