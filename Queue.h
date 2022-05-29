@@ -383,11 +383,13 @@ int Queue<T>::size() {
  * returns a new queue that is holding only the items from the source queue that passed the filter.
  */
 
-template<typename T, typename P>
-Queue<T> filter(const Queue<T> &queue, P pred) {
+template<class T>
+Queue<T> filter(const Queue<T> &queue, bool function(T item)){
     Queue<T> new_queue;
-    for (const T item: queue) {
-        if (P(item)) {
+    for (const T item : queue)
+    {
+        if (function(item))
+        {
             new_queue.pushBack(item);
         }
     }

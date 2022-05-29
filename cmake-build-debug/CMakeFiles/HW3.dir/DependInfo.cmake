@@ -4,14 +4,24 @@ set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
 
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "C:/Users/PC/Dropbox/studies/Matam/HW3/HealthPoints.cpp" "C:/Users/PC/Dropbox/studies/Matam/HW3/cmake-build-debug/CMakeFiles/HW3.dir/HealthPoints.cpp.obj"
+  "C:/Users/PC/Dropbox/studies/Matam/HW3/HealthPointsExampleTest.cpp" "C:/Users/PC/Dropbox/studies/Matam/HW3/cmake-build-debug/CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj"
+  "C:/Users/PC/Dropbox/studies/Matam/HW3/QueueExampleTests.cpp" "C:/Users/PC/Dropbox/studies/Matam/HW3/cmake-build-debug/CMakeFiles/HW3.dir/QueueExampleTests.cpp.obj"
+  "C:/Users/PC/Dropbox/studies/Matam/HW3/TestMain.cpp" "C:/Users/PC/Dropbox/studies/Matam/HW3/cmake-build-debug/CMakeFiles/HW3.dir/TestMain.cpp.obj"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
+
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "../."
   )
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/annav/Documents/CS/matam/hw3/Matam-HW3/HealthPoints.cpp" "CMakeFiles/HW3.dir/HealthPoints.cpp.obj" "gcc" "CMakeFiles/HW3.dir/HealthPoints.cpp.obj.d"
-  "C:/Users/annav/Documents/CS/matam/hw3/Matam-HW3/HealthPointsExampleTest.cpp" "CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj" "gcc" "CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj.d"
-  "C:/Users/annav/Documents/CS/matam/hw3/Matam-HW3/QueueExampleTests.cpp" "CMakeFiles/HW3.dir/QueueExampleTests.cpp.obj" "gcc" "CMakeFiles/HW3.dir/QueueExampleTests.cpp.obj.d"
-  "C:/Users/annav/Documents/CS/matam/hw3/Matam-HW3/TestMain.cpp" "CMakeFiles/HW3.dir/TestMain.cpp.obj" "gcc" "CMakeFiles/HW3.dir/TestMain.cpp.obj.d"
   )
 
 # Targets to which this target links.
