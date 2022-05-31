@@ -1,21 +1,22 @@
 #include "HealthPoints.h"
 #include <iostream>
 
-static int withinBounds(int health, const int max_health){
+static int withinBounds(int health, const int max_health) {
     if (health < 0)
     {
         return 0;
-    }
-    else if (health > max_health)
+    } else if (health > max_health)
     {
         return max_health;
-    }
-    else
+    } else
+    {
         return health;
+    }
 }
 
 HealthPoints::HealthPoints(int max_health) : max_health(max_health), health(max_health) {
-    if (max_health <= 0) {
+    if (max_health <= 0)
+    {
         throw InvalidArgument();
     }
 }
@@ -27,13 +28,13 @@ HealthPoints::operator bool() const {
 
 //-------------------------------addition/subtraction operators----------------------------//
 HealthPoints &HealthPoints::operator+=(const int num) {
-    health = health+num;
+    health = health + num;
     health = withinBounds(health, max_health);
     return *this;
 }
 
 HealthPoints &HealthPoints::operator-=(const int num) {
-    health = health-num;
+    health = health - num;
     health = withinBounds(health, max_health);
     return *this;
 }
@@ -58,9 +59,11 @@ HealthPoints operator-(const int num, const HealthPoints health) {
 
 //----------------------comparison operators-----------------------------//
 bool HealthPoints::operator==(const HealthPoints other) const {
-    if (this->health == other.health) {
+    if (this->health == other.health)
+    {
         return true;
-    } else {
+    } else
+    {
         return false;
     }
 }
@@ -96,8 +99,7 @@ std::ostream &operator<<(std::ostream &os, HealthPoints current) {
     return os;
 }
 
-bool operator==(int num, const HealthPoints health)
-{
+bool operator==(int num, const HealthPoints health) {
     return health == num;
 }
 

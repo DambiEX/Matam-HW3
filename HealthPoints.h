@@ -55,10 +55,15 @@ HealthPoints operator+(int num, HealthPoints health);
 HealthPoints operator-(int num, HealthPoints health);
 
 bool operator==(int num, HealthPoints health);
+
 bool operator>=(int num, HealthPoints health);
+
 bool operator<=(int num, HealthPoints health);
+
 bool operator>(int num, HealthPoints health);
+
 bool operator<(int num, HealthPoints health);
+
 bool operator!=(int num, HealthPoints health);
 
 #endif //HW3_HEALTHPOINTS_H
